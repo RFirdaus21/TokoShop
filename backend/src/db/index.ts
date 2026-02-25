@@ -11,6 +11,18 @@ const pool = new Pool({
     connectionString: ENV.DATABASE_URL,
 });
 
+const shutdown = async () => {
+    await pool.end();
+};
+
+process.on("SIGINT", () => {
+    void shutdown();
+});
+
+process.on("SIGTERM", () => {
+    void shutdown();
+});
+
 pool.on("connect", () => {
     console.log("Connected to the database, GG Gemink ");
 });
